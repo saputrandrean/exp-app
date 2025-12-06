@@ -1,0 +1,17 @@
+<div>
+  <h2>Edit Customer</h2>
+
+  <form action="/company/update/<%= customer.ID %>" method="POST">
+    <label for="customer">Customer Name:</label>
+    <input
+      type="text"
+      name="customer"
+      id="customer"
+      value="<%= customer.CUSTOMER_NAME %>"
+      required
+    />
+    <br /><br />
+    <button type="submit">Update Customer</button>
+    <a href="/company">Cancel</a>
+  </form>
+</div>

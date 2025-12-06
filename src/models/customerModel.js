@@ -1,31 +1,33 @@
 import conn from "../config/database.js";
 
 const getAllCustomers = (callback) => {
-  return conn.query("SELECT * FROM CUSTOMER", callback);
+  const query = "SELECT * FROM CUSTOMER";
+  return conn.query(query, callback);
 };
 
-const createNewCustomer = (body, callback) => {
-  return conn.query(
-    `INSERT INTO CUSTOMER (CUSTOMER_NAME) VALUES ('${body.CUSTOMER_NAME}')`,
-    callback
-  );
+const createNewCustomer = ({ customer }) => {
+  const query = "INSERT INTO CUSTOMER (CUSTOMER_NAME) VALUES (?)";
+  return conn.query(query, [customer]);
 };
 
-const updateCustomer = (id, body, callback) => {
-  return conn.query(
-    `UPDATE CUSTOMER
-    SET CUSTOMER_NAME = ('${body.CUSTOMER_NAME}')
-    WHERE ID = ${id}`,
-    callback
-  );
+const getCustomerById = (id, callback) => {
+  const query = "SELECT * FROM CUSTOMER WHERE ID = ?";
+  conn.query(query, [id], (err, results) => {
+    if (err) {
+      return callback(err, null);
+    }
+    callback(null, results[0]); // Return first row
+  });
 };
 
-const deleteCustomer = (id, callback) => {
-  return conn.query(
-    `DELETE FROM CUSTOMER
-    WHERE ID = ${id}`,
-    callback
-  );
+const updateCustomer = (id, { customer }) => {
+  const query = "UPDATE CUSTOMER SET CUSTOMER_NAME = ? WHERE ID = ?";
+  return conn.query(query, [customer, id]);
+};
+
+const deleteCustomer = (id) => {
+  const query = "DELETE FROM CUSTOMER WHERE ID = ?";
+  return conn.query(query, [id]);
 };
 
 export default {
@@ -33,4 +35,5 @@ export default {
   createNewCustomer,
   updateCustomer,
   deleteCustomer,
+  getCustomerById,
 };

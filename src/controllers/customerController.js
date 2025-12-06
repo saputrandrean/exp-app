@@ -1,3 +1,4 @@
+import { title } from "process";
 import customerModel from "../models/customerModel.js";
 
 const getAllCustomers = (req, res) => {
@@ -8,22 +9,29 @@ const getAllCustomers = (req, res) => {
         error: err.message,
       });
     }
-    res.json({
-      message: "Get Companies Success",
-      data: rows,
+    // res.json({
+    //   message: "Get Companies Success",
+    //   data: rows,
+    // });
+    res.render("customer", {
+      rows,
+      title: "Customer Management",
+      page: "company",
     });
   });
 };
 
 const createNewCustomer = async (req, res) => {
-  const { body } = req;
+  const { customer } = req.body;
 
   try {
-    await customerModel.createNewCustomer(body);
-    res.json({
-      message: "Create New Company Success 2",
-      data: body,
-    });
+    console.log({ customer });
+    await customerModel.createNewCustomer({ customer });
+    // res.json({
+    //   message: "Create New Company Success 2",
+    //   data: body,
+    // });
+    res.redirect("/company");
   } catch (error) {
     console.error("Error:", error); // Log error to console
 
@@ -35,16 +43,36 @@ const createNewCustomer = async (req, res) => {
   }
 };
 
+// NEW: Show edit form
+const showEditForm = (req, res) => {
+  const { id } = req.params;
+
+  customerModel.getCustomerById(id, (err, customer) => {
+    if (err) {
+      return res.status(500).send("Error fetching customer");
+    }
+    if (!customer) {
+      return res.status(404).send("Customer not found");
+    }
+    res.render("customer-edit", {
+      customer,
+      title: "Edit Customer",
+      page: "company",
+    });
+  });
+};
+
 const updateCustomer = async (req, res) => {
   const { id } = req.params;
-  const { body } = req;
+  const { customer } = req.body;
 
   try {
-    await customerModel.updateCustomer(id, body);
-    res.json({
-      message: "Successful Update Customer",
-      data: body,
-    });
+    await customerModel.updateCustomer(id, { customer });
+    // res.json({
+    //   message: "Successful Update Customer",
+    //   data: body,
+    // });
+    res.redirect("/company");
   } catch (error) {
     res.status(500).json({
       message: "Failed to update existing data",
@@ -59,9 +87,10 @@ const deleteCustomer = async (req, res) => {
 
   try {
     await customerModel.deleteCustomer(id);
-    res.json({
-      message: "Successfull Delete Customer",
-    });
+    // res.json({
+    //   message: "Successfull Delete Customer",
+    // });
+    res.redirect("/company");
   } catch (error) {
     res.status(500).json({
       message: "Failed to delete existing data",
@@ -74,6 +103,7 @@ const deleteCustomer = async (req, res) => {
 export default {
   getAllCustomers,
   createNewCustomer,
+  showEditForm,
   updateCustomer,
   deleteCustomer,
 };
