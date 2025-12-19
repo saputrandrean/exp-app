@@ -9,10 +9,6 @@ const getAllCustomers = (req, res) => {
         error: err.message,
       });
     }
-    // res.json({
-    //   message: "Get Companies Success",
-    //   data: rows,
-    // });
     res.render("customer", {
       rows,
       title: "Customer Management",
@@ -22,16 +18,14 @@ const getAllCustomers = (req, res) => {
 };
 
 const createNewCustomer = async (req, res) => {
-  const { customer } = req.body;
-
+  const { customerName, taxID } = req.body;
   try {
-    console.log({ customer });
-    await customerModel.createNewCustomer({ customer });
-    // res.json({
-    //   message: "Create New Company Success 2",
-    //   data: body,
-    // });
-    res.redirect("/company");
+    console.log({ customerName });
+    await customerModel.createNewCustomer({
+      customerName,
+      taxID,
+    });
+    res.redirect("/customer");
   } catch (error) {
     console.error("Error:", error); // Log error to console
 
@@ -72,7 +66,7 @@ const updateCustomer = async (req, res) => {
     //   message: "Successful Update Customer",
     //   data: body,
     // });
-    res.redirect("/company");
+    res.redirect("/customer");
   } catch (error) {
     res.status(500).json({
       message: "Failed to update existing data",

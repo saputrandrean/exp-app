@@ -1,13 +1,13 @@
 import conn from "../config/database.js";
 
 const getAllCustomers = (callback) => {
-  const query = "SELECT * FROM CUSTOMER";
+  const query = "SELECT * FROM CUSTOMER WHERE IS_DELETED = 0";
   return conn.query(query, callback);
 };
 
-const createNewCustomer = ({ customer }) => {
-  const query = "INSERT INTO CUSTOMER (CUSTOMER_NAME) VALUES (?)";
-  return conn.query(query, [customer]);
+const createNewCustomer = ({ customerName, taxID }) => {
+  const query = "INSERT INTO CUSTOMER (CUSTOMER_NAME, TAX_ID) VALUES (?,?)";
+  return conn.query(query, [customerName, taxID]);
 };
 
 const getCustomerById = (id, callback) => {
@@ -26,7 +26,7 @@ const updateCustomer = (id, { customer }) => {
 };
 
 const deleteCustomer = (id) => {
-  const query = "DELETE FROM CUSTOMER WHERE ID = ?";
+  const query = "UPDATE CUSTOMER SET IS_DELETED = 1 WHERE ID = ?";
   return conn.query(query, [id]);
 };
 

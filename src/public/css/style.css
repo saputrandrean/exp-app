@@ -1,3 +1,33 @@
 :root {
-  background-color: aqua;
+  background-color: whitesmoke;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  display: flex;
+}
+
+main {
+  box-shadow: ;
+}
+
+table,
+th,
+td {
+  border: 1px solid;
+  border-collapse: collapse;
+}
+
+table {
+  width: 100%;
+}
+
+th,
+td {
+  padding: 10px;
+}
+
+td {
+  text-align: center;
 }

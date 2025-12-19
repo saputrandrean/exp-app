@@ -6,6 +6,7 @@ import "dotenv/config";
 import { fileURLToPath } from "url";
 import expressEjsLayouts from "express-ejs-layouts";
 import customerRouter from "./routes/customerRoutes.js";
+import userRouter from "./routes/userRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -30,8 +31,25 @@ app.use(express.static(path.join(__dirname, "public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+//Auth
+function basicAuth(req, res) {
+  const authHeader = req.headers.authorization;
+
+  if (!authHeader) {
+    res.header("WWW-Authenticate", 'Basic realm="Secure Area"');
+    return res.status(401).json({ message: "Authenticate required" });
+  }
+
+  const base64Credentials = authHeader.split(" ")[1];
+  const credentials = Buffer.from(base64Credentials, "base64").toString(
+    "ascii"
+  );
+  const [username, password] = credentials.split(":");
+}
+
 // Routes
-app.use("/company", customerRouter);
+app.use("/customer", customerRouter);
+app.use("/user", userRouter);
 
 app.get("/", (req, res) => {
   res.render("index", { title: "Index", message: "This is message" });
