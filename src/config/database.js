@@ -1,4 +1,4 @@
-import mariadb from "mariadb/callback.js";
+import mariadb from "mariadb";
 
 const conn = mariadb.createPool({
   host: process.env.DB_HOST,

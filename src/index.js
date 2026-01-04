@@ -7,6 +7,8 @@ import { fileURLToPath } from "url";
 import expressEjsLayouts from "express-ejs-layouts";
 import customerRouter from "./routes/customerRoutes.js";
 import userRouter from "./routes/userRoutes.js";
+import quotationRouter from "./routes/quotationRoutes.js";
+import supplierRouter from "./routes/supplierRoutes.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -50,6 +52,8 @@ function basicAuth(req, res) {
 // Routes
 app.use("/customer", customerRouter);
 app.use("/user", userRouter);
+app.use("/supplier", supplierRouter);
+app.use("/customer-quotation", quotationRouter);
 
 app.get("/", (req, res) => {
   res.render("index", { title: "Index", message: "This is message" });
